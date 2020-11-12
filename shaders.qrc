@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>shader/lamp.frag</file>
+        <file>shader/lamp.vert</file>
+        <file>shader/modelloading.frag</file>
+        <file>shader/modelloading.vert</file>
+        <file>shader/textures.frag</file>
+        <file>shader/textures.vert</file>
+    </qresource>
+</RCC>

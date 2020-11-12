@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>虚拟装配系统</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QTreeView" name="treeView">
+       <property name="maximumSize">
+        <size>
+         <width>500</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="dragEnabled">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="fold">
+       <property name="maximumSize">
+        <size>
+         <width>20</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="images.qrc">
+         <normaloff>:/textures/arrow_back.png</normaloff>:/textures/arrow_back.png</iconset>
+       </property>
+      </widget>
+      <widget class="QtOpenglWidget" name="openGLWidget"/>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menunew">
+    <property name="title">
+     <string>新建</string>
+    </property>
+    <widget class="QMenu" name="menu">
+     <property name="title">
+      <string>导入</string>
+     </property>
+     <addaction name="actionnew_import"/>
+     <addaction name="actionexist_import"/>
+    </widget>
+    <addaction name="menu"/>
+   </widget>
+   <widget class="QMenu" name="menuassmble">
+    <property name="title">
+     <string>装配</string>
+    </property>
+   </widget>
+   <addaction name="menunew"/>
+   <addaction name="menuassmble"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionnew_import">
+   <property name="text">
+    <string>新模型</string>
+   </property>
+  </action>
+  <action name="actionexist_import">
+   <property name="text">
+    <string>已设置模型</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QtOpenglWidget</class>
+   <extends>QOpenGLWidget</extends>
+   <header>qtopenglwidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
+ <connections/>
+</ui>
