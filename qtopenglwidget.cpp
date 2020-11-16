@@ -51,19 +51,19 @@ void QtOpenglWidget::initializeGL(){
 
     success = Lightshader.addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shader/lamp.vert");
     if (!success) {
-        qDebug() << "shaderProgram addShaderFromSourceFile failed!" << shaderProgram.log();
+        qDebug() << "Lightshader addShaderFromSourceFile failed!" << Lightshader.log();
         return;
     }
 
     success = Lightshader.addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shader/lamp.frag");
     if (!success) {
-        qDebug() << "shaderProgram addShaderFromSourceFile failed!" << shaderProgram.log();
+        qDebug() << "Lightshader addShaderFromSourceFile failed!" << Lightshader.log();
         return;
     }
 
     success = Lightshader.link();
     if(!success) {
-        qDebug() << "shaderProgram link failed!" << shaderProgram.log();
+        qDebug() << "Lightshader link failed!" << Lightshader.log();
     }
 
 

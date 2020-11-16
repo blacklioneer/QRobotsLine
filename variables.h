@@ -21,6 +21,7 @@ struct ObjectData{
 
 };
 
+
 struct OjFind
 {
     string findname;
@@ -37,3 +38,10 @@ struct OjFind
 
 extern vector<string> g_parent_type;
 extern vector<ObjectData> g_objects;
+
+struct dirLights {
+    QVector3D direction;
+    QVector3D ambient;
+    QVector3D diffuse;
+    QVector3D specular;
+};
