@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    addlights.cpp \
     geometryengine.cpp \
     importnew.cpp \
     main.cpp \
@@ -25,6 +26,7 @@ SOURCES += \
     variables.cpp
 
 HEADERS += \
+    addlights.h \
     geometryengine.h \
     importnew.h \
     mainwindow.h \
@@ -33,6 +35,7 @@ HEADERS += \
     variables.h
 
 FORMS += \
+    addlights.ui \
     importnew.ui \
     mainwindow.ui
 

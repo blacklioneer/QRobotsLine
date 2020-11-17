@@ -40,12 +40,12 @@ struct PointLight {
 //    vec3 specular;
 //};
 
-#define NR_POINT_LIGHTS 4
+ #define NR_POINT_LIGHTS 4
 
 in vec3 FragPos;
 in vec3 Normal;
 in vec2 TexCoords;
-
+//uniform int NR_POINT_LIGHTS;
 uniform vec3 viewPos;
 uniform DirLight dirLight;
 uniform PointLight pointLights[NR_POINT_LIGHTS];

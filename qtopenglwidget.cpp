@@ -14,9 +14,9 @@ QtOpenglWidget::QtOpenglWidget(QWidget *parent) : QOpenGLWidget (parent),
     m_pTimer = new QTimer(this);
     connect(m_pTimer, &QTimer::timeout, this, [=]{
         m_nTimeValue += 1;
-        update();
+        update(); //界面更新程序
     });
-    m_pTimer->start(40);
+    m_pTimer->start(20);
 }
 
 QtOpenglWidget::~QtOpenglWidget(){
@@ -67,66 +67,7 @@ void QtOpenglWidget::initializeGL(){
     }
 
 
-    //VAO，VBO data
-    float vertices[] = {
-        // positions          // normals           // texture coords
-        -0.1f, -0.1f, -0.1f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
-         0.1f, -0.1f, -0.1f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
-         0.1f,  0.1f, -0.1f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
-         0.1f,  0.1f, -0.1f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
-        -0.1f,  0.1f, -0.1f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
-        -0.1f, -0.1f, -0.1f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
-
-        -0.1f, -0.1f,  0.1f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
-         0.1f, -0.1f,  0.1f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
-         0.1f,  0.1f,  0.1f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
-         0.1f,  0.1f,  0.1f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
-        -0.1f,  0.1f,  0.1f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
-        -0.1f, -0.1f,  0.1f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
-
-        -0.1f,  0.1f,  0.1f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-        -0.1f,  0.1f, -0.1f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
-        -0.1f, -0.1f, -0.1f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-        -0.1f, -0.1f, -0.1f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-        -0.1f, -0.1f,  0.1f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-        -0.1f,  0.1f,  0.1f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-
-         0.1f,  0.1f,  0.1f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-         0.1f,  0.1f, -0.1f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
-         0.1f, -0.1f, -0.1f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-         0.1f, -0.1f, -0.1f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-         0.1f, -0.1f,  0.1f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
-         0.1f,  0.1f,  0.1f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-
-        -0.1f, -0.1f, -0.1f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
-         0.1f, -0.1f, -0.1f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
-         0.1f, -0.1f,  0.1f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
-         0.1f, -0.1f,  0.1f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
-        -0.1f, -0.1f,  0.1f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
-        -0.1f, -0.1f, -0.1f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
-
-        -0.1f,  0.1f, -0.1f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
-         0.1f,  0.1f, -0.1f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
-         0.1f,  0.1f,  0.1f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
-         0.1f,  0.1f,  0.1f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
-        -0.1f,  0.1f,  0.1f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
-        -0.1f,  0.1f, -0.1f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
-    };
-
-    QOpenGLVertexArrayObject::Binder vaoBind(&VAO);
-
-    VBO.create();
-    VBO.bind();
-    VBO.allocate(vertices, sizeof(vertices));
-
-    // position attribute
-    Lightshader.bind();   // don't forget to activate/use the shader before setting uniforms!
-    int attr = -1;
-    attr = Lightshader.attributeLocation("aPos");
-    Lightshader.setAttributeBuffer(attr, GL_FLOAT, 0, 3, sizeof(GLfloat) * 8);
-    Lightshader.enableAttributeArray(attr);
-    // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
-    VBO.release();
+    pointLightSetting();
 
     // configure global opengl state
     // -----------------------------
@@ -158,44 +99,60 @@ void QtOpenglWidget::paintGL(){
      shaderProgram.bind();
 
     // bind textures on corresponding texture units
-    shaderProgram.setUniformValue("dirLight.direction",QVector3D(-0.2f, -1.0f, -0.3f));
-    shaderProgram.setUniformValue("dirLight.ambient", QVector3D(0.05f, 0.05f, 0.05f));
-    shaderProgram.setUniformValue("dirLight.diffuse",QVector3D(0.4f, 0.4f, 0.4f));
-    shaderProgram.setUniformValue("dirLight.specular", QVector3D(0.1f, 0.1f, 0.1f));
+    shaderProgram.setUniformValue("dirLight.direction",dirlights.direction);
+    shaderProgram.setUniformValue("dirLight.ambient", dirlights.ambient);
+    shaderProgram.setUniformValue("dirLight.diffuse",dirlights.diffuse);
+    shaderProgram.setUniformValue("dirLight.specular", dirlights.specular);
     //新增3.23为实现光影反射而增加
+    shaderProgram.setUniformValue("NR_POINT_LIGHTS", static_cast<int>(g_pointlights.size())); //设置点光源数量
+    //光源自定义添加修改
+    if(g_pointlights.size()>0){
+        for(unsigned int i = 0; i < g_pointlights.size(); ++i){
+            string a1{"pointLights["};
+            string a2 = a1 + to_string(i) +"]";
+            shaderProgram.setUniformValue((a2 + ".position").c_str(), g_pointlights[i].position);
+            shaderProgram.setUniformValue((a2 + ".ambient").c_str(), g_pointlights[i].ambient);
+            shaderProgram.setUniformValue((a2 + ".diffuse").c_str(), g_pointlights[i].diffuse);
+            shaderProgram.setUniformValue((a2 + ".specular").c_str(), g_pointlights[i].specular);
+            shaderProgram.setUniformValue((a2 + ".constant").c_str(), g_pointlights[i].constant);
+            shaderProgram.setUniformValue((a2 + ".linear").c_str(), g_pointlights[i].linear);
+            shaderProgram.setUniformValue((a2 + ".quadratic").c_str(), g_pointlights[i].quadratic);
+        }
+    }
 
-    // point light 1
-    shaderProgram.setUniformValue("pointLights[0].position", cubePositions[0]);
-    shaderProgram.setUniformValue("pointLights[0].ambient", QVector3D(0.05f, 0.05f, 0.05f));
-    shaderProgram.setUniformValue("pointLights[0].diffuse", QVector3D(0.8f, 0.8f, 0.8f));
-    shaderProgram.setUniformValue("pointLights[0].specular", QVector3D(1.0f, 1.0f, 1.0f));
-    shaderProgram.setUniformValue("pointLights[0].constant", 1.0f);
-    shaderProgram.setUniformValue("pointLights[0].linear", 0.09f);
-    shaderProgram.setUniformValue("pointLights[0].quadratic", 0.032f);
-    // point light 2
-    shaderProgram.setUniformValue("pointLights[1].position", cubePositions[1]);
-    shaderProgram.setUniformValue("pointLights[1].ambient", QVector3D(0.05f, 0.05f, 0.05f));
-    shaderProgram.setUniformValue("pointLights[1].diffuse", QVector3D(0.8f, 0.8f, 0.8f));
-    shaderProgram.setUniformValue("pointLights[1].specular", QVector3D(1.0f, 1.0f, 1.0f));
-    shaderProgram.setUniformValue("pointLights[1].constant", 1.0f);
-    shaderProgram.setUniformValue("pointLights[1].linear", 0.09f);
-    shaderProgram.setUniformValue("pointLights[1].quadratic", 0.032f);
-    // point light 3
-    shaderProgram.setUniformValue("pointLights[2].position", cubePositions[2]);
-    shaderProgram.setUniformValue("pointLights[2].ambient", QVector3D(0.05f, 0.05f, 0.05f));
-    shaderProgram.setUniformValue("pointLights[2].diffuse", QVector3D(0.8f, 0.8f, 0.8f));
-    shaderProgram.setUniformValue("pointLights[2].specular", QVector3D(1.0f, 1.0f, 1.0f));
-    shaderProgram.setUniformValue("pointLights[2].constant", 1.0f);
-    shaderProgram.setUniformValue("pointLights[2].linear", 0.09f);
-    shaderProgram.setUniformValue("pointLights[2].quadratic", 0.032f);
-    // point light 4
-    shaderProgram.setUniformValue("pointLights[3].position", cubePositions[3]);
-    shaderProgram.setUniformValue("pointLights[3].ambient", QVector3D(0.05f, 0.05f, 0.05f));
-    shaderProgram.setUniformValue("pointLights[3].diffuse", QVector3D(0.8f, 0.8f, 0.8f));
-    shaderProgram.setUniformValue("pointLights[3].specular", QVector3D(1.0f, 1.0f, 1.0f));
-    shaderProgram.setUniformValue("pointLights[3].constant", 1.0f);
-    shaderProgram.setUniformValue("pointLights[3].linear", 0.09f);
-    shaderProgram.setUniformValue("pointLights[3].quadratic", 0.032f);
+
+//    // point light 1
+//    shaderProgram.setUniformValue("pointLights[0].position", cubePositions[0]);
+//    shaderProgram.setUniformValue("pointLights[0].ambient", QVector3D(0.05f, 0.05f, 0.05f));
+//    shaderProgram.setUniformValue("pointLights[0].diffuse", QVector3D(0.8f, 0.8f, 0.8f));
+//    shaderProgram.setUniformValue("pointLights[0].specular", QVector3D(1.0f, 1.0f, 1.0f));
+//    shaderProgram.setUniformValue("pointLights[0].constant", 1.0f);
+//    shaderProgram.setUniformValue("pointLights[0].linear", 0.09f);
+//    shaderProgram.setUniformValue("pointLights[0].quadratic", 0.032f);
+//    // point light 2
+//    shaderProgram.setUniformValue("pointLights[1].position", cubePositions[1]);
+//    shaderProgram.setUniformValue("pointLights[1].ambient", QVector3D(0.05f, 0.05f, 0.05f));
+//    shaderProgram.setUniformValue("pointLights[1].diffuse", QVector3D(0.8f, 0.8f, 0.8f));
+//    shaderProgram.setUniformValue("pointLights[1].specular", QVector3D(1.0f, 1.0f, 1.0f));
+//    shaderProgram.setUniformValue("pointLights[1].constant", 1.0f);
+//    shaderProgram.setUniformValue("pointLights[1].linear", 0.09f);
+//    shaderProgram.setUniformValue("pointLights[1].quadratic", 0.032f);
+//    // point light 3
+//    shaderProgram.setUniformValue("pointLights[2].position", cubePositions[2]);
+//    shaderProgram.setUniformValue("pointLights[2].ambient", QVector3D(0.05f, 0.05f, 0.05f));
+//    shaderProgram.setUniformValue("pointLights[2].diffuse", QVector3D(0.8f, 0.8f, 0.8f));
+//    shaderProgram.setUniformValue("pointLights[2].specular", QVector3D(1.0f, 1.0f, 1.0f));
+//    shaderProgram.setUniformValue("pointLights[2].constant", 1.0f);
+//    shaderProgram.setUniformValue("pointLights[2].linear", 0.09f);
+//    shaderProgram.setUniformValue("pointLights[2].quadratic", 0.032f);
+//    // point light 4
+//    shaderProgram.setUniformValue("pointLights[3].position", cubePositions[3]);
+//    shaderProgram.setUniformValue("pointLights[3].ambient", QVector3D(0.05f, 0.05f, 0.05f));
+//    shaderProgram.setUniformValue("pointLights[3].diffuse", QVector3D(0.8f, 0.8f, 0.8f));
+//    shaderProgram.setUniformValue("pointLights[3].specular", QVector3D(1.0f, 1.0f, 1.0f));
+//    shaderProgram.setUniformValue("pointLights[3].constant", 1.0f);
+//    shaderProgram.setUniformValue("pointLights[3].linear", 0.09f);
+//    shaderProgram.setUniformValue("pointLights[3].quadratic", 0.032f);
 
     // spotLight
 //    ourShader.setVec3("spotLight.position", camera->position);
@@ -229,7 +186,7 @@ void QtOpenglWidget::paintGL(){
         model.rotate((*it).primary_angle_y,QVector3D(0.0f,1.0f,0.0f));
         model.rotate((*it).primary_angle_z,QVector3D(0.0f,0.0f,1.0f));
        // model.translate(QVector3D(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
-        model.scale(0.2f);	// it's a bit too big for our scene, so scale it down
+        model.scale(0.02f);	// it's a bit too big for our scene, so scale it down
         shaderProgram.setUniformValue("model", model);
         geometryengine->drawObj((*it).path,&shaderProgram,false);
     }
@@ -239,30 +196,32 @@ void QtOpenglWidget::paintGL(){
 //                            &shaderProgram,false);
     shaderProgram.release();
 
-    {// render light
+    // render light
+    if(g_pointlights.size()>0){
         Lightshader.bind();
         Lightshader.setUniformValue("projection", projection);
         Lightshader.setUniformValue("view", camera->getViewMatrix());
         QOpenGLVertexArrayObject::Binder vaoBind(&VAO);
-        for (unsigned int i = 0; i < 4; i++)
-            {
-                    model = QMatrix4x4() ;
-                   if (i == 0) {
-                       model.translate(QVector3D(0.0f, 0.0f, 0.0f));
-                       model.rotate(0, QVector3D(0.0f, 1.0f, 0.0f));
-                   }
-                model.translate(cubePositions[i]);
-                float angle = (i + 1.0f) * m_nTimeValue;
-                model.rotate(angle, QVector3D(0.0f, 0.0f, 1.0f));
+        for(unsigned int i = 0; i < g_pointlights.size(); ++i)
+        {
+                model = QMatrix4x4() ;
+               if (i == 0) {
+                   model.translate(QVector3D(0.0f, 0.0f, 0.0f));
+                   model.rotate(0, QVector3D(0.0f, 1.0f, 0.0f));
+               }
+            model.translate(cubePositions[i]);
+            float angle = (i + 1.0f) * m_nTimeValue;
+            model.rotate(angle, QVector3D(0.0f, 0.0f, 1.0f));
 
-                model.scale(0.2f); // Make it a smaller cube
-                Lightshader.setUniformValue("model", model);;
-                glDrawArrays(GL_TRIANGLES, 0, 36);
-            }
-    }
+            model.scale(0.2f); // Make it a smaller cube
+            Lightshader.setUniformValue("model", model);;
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
+
 
 
     Lightshader.release();
+    }
 }
 
 void QtOpenglWidget::keyPressEvent(QKeyEvent *event)
@@ -311,4 +270,33 @@ void QtOpenglWidget::wheelEvent(QWheelEvent *event)
 {
     QPoint offset = event->angleDelta();
     camera->processMouseScroll(offset.y()/20.0f);
+}
+
+void QtOpenglWidget::pointLightSetting()
+{
+    //VAO，VBO data
+    float light_Model[] = {
+        // positions          // normals           // texture coords
+        -0.1f, -0.1f, -0.1f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+         0.1f, -0.1f, -0.1f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
+         0.1f,  0.1f, -0.1f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+         0.1f,  0.1f, -0.1f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+        -0.1f,  0.1f, -0.1f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
+        -0.1f, -0.1f, -0.1f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+    };
+
+    QOpenGLVertexArrayObject::Binder vaoBind(&VAO);
+
+    VBO.create();
+    VBO.bind();
+    VBO.allocate(light_Model, sizeof(light_Model));
+
+    // position attribute
+    Lightshader.bind();   // don't forget to activate/use the shader before setting uniforms!
+    int attr = -1;
+    attr = Lightshader.attributeLocation("aPos");
+    Lightshader.setAttributeBuffer(attr, GL_FLOAT, 0, 3, sizeof(GLfloat) * 8);
+    Lightshader.enableAttributeArray(attr);
+    // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
+    VBO.release();
 }

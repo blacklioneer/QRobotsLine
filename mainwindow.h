@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QStandardItemModel>
 #include "importnew.h"
+#include "addlights.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -25,12 +26,14 @@ private slots:
     void slotTreeMenuCollapse(bool checked = false);
     void slotTreeMenuAddType(bool checked = false);
     void slotTreeMenuRemoveType(bool checked = false);
+    void slotTreeMenuAddLightType(bool checked = false);
 
     void on_fold_clicked();
 
 private:
     Ui::MainWindow *ui;
     ImportNew *importnew;
+    AddLights *addlights;
     bool fold = false;  
     QStandardItemModel* mModel;
     std::map<std::string,QStandardItem*> itemmap;

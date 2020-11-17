@@ -84,6 +84,15 @@ void MainWindow::InitTree()
 
 
             }
+            //光源模组添加
+            for(vector<PointLights>::iterator it = g_pointlights.begin(); it!=g_pointlights.end();it++){
+
+                QList<QStandardItem*> items;
+                QStandardItem* itemName = new QStandardItem(QString::fromLocal8Bit((*it).name.c_str()));
+                items << itemName;
+                items[0]->setData(MARK_ITEM,ROLE_MARK);
+                itemmap["Light"]->appendRow(items);
+            }
 //            for(int i=0;i<5;i++)
 //            {
 //                //一级节点：年级，只设第1列的数据，第2、3列将显示为空白
@@ -154,8 +163,8 @@ void MainWindow::slotTreeMenu(const QPoint &pos)
     if (var.isValid())
     {
         //可获取元素的文本、data,进行其他判断处理
-        //QStandardItem* item = mModel->itemFromIndex(index);
-        //QString text = item->text();
+        QStandardItem* item = mModel->itemFromIndex(index);
+        QString text = item->text();
         //QVariant data = item->data(Qt::UserRole + 1);
         //...
 
@@ -171,6 +180,9 @@ void MainWindow::slotTreeMenu(const QPoint &pos)
         }
         else if(MARK_ITEM == var.toInt()){
         menu.addAction(QStringLiteral("删除"), this, SLOT(slotTreeMenuRemoveType(bool)));
+        }
+        else if(text.toStdString() == "光源"){
+        menu.addAction(QStringLiteral("添加光源"), this, SLOT(slotTreeMenuAddLightType(bool)));
         }
     }
     else{
@@ -298,6 +310,13 @@ void MainWindow::slotTreeMenuRemoveType(bool checked)
             }
         }
     }
+}
+
+void MainWindow::slotTreeMenuAddLightType(bool checked)
+{
+    addlights = new AddLights(this);
+    addlights->setModal(true);
+    addlights->exec();
 }
 
 void MainWindow::slotTreeMenuCollapse(bool checked)

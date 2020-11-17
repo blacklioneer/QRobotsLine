@@ -45,6 +45,6 @@ void ImportNew::on_buttonBox_accepted()
 
 void ImportNew::on_toolButton_clicked()
 {
-    QString path = QFileDialog::getExistingDirectory(this,QStringLiteral("打开文件"),"./savePages");
+    QString path = QFileDialog::getOpenFileName(this,QStringLiteral("打开文件"),"./savePages");
     ui->lineEdit_path->setText(path);
 }
