@@ -19,6 +19,8 @@ AddLights::AddLights(QWidget *parent) :
     ui->specular_X->setValue(1.0f);
     ui->specular_Y->setValue(1.0f);
     ui->specular_Z->setValue(1.0f);
+    ui->linear->setValue(0.09f);
+    ui->quadratic->setValue(0.032f);
 }
 
 AddLights::~AddLights()
@@ -46,7 +48,6 @@ void AddLights::on_buttonBox_accepted()
         bufferdata.constant = 1.0f;
         bufferdata.linear = ui->linear->text().toFloat();
         bufferdata.quadratic = ui->quadratic->text().toFloat();
-
         g_pointlights.emplace_back(bufferdata);
     }
 }
