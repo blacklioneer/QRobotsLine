@@ -209,7 +209,7 @@ void QtOpenglWidget::paintGL(){
                    model.translate(QVector3D(0.0f, 0.0f, 0.0f));
                    model.rotate(0, QVector3D(0.0f, 1.0f, 0.0f));
                }
-            model.translate(cubePositions[i]);
+            model.translate(g_pointlights[i].position);
             float angle = (i + 1.0f) * m_nTimeValue;
             model.rotate(angle, QVector3D(0.0f, 0.0f, 1.0f));
 

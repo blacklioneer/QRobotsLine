@@ -54,7 +54,7 @@ void MainWindow::InitTree()
             //设置数据//遍历父类容器，配置树节点主控件
             for(vector<string>::iterator it = g_parent_type.begin(); it!=g_parent_type.end();it++){
 
-                QStandardItem* itemMain = new QStandardItem(QString::fromLocal8Bit((*it).c_str()));
+                QStandardItem* itemMain = new QStandardItem(QString::fromStdString((*it).c_str()));
                 itemMain->setData(MARK_FOLDER,ROLE_MARK);
                 itemFirstmap[(*it)] = itemMain; //数据map将名字与 树控件单元进行匹配创建字典
                 mModel->appendRow(itemMain);
@@ -69,9 +69,9 @@ void MainWindow::InitTree()
             for(vector<ObjectData>::iterator it = g_objects.begin(); it!=g_objects.end();it++){
 
                 QList<QStandardItem*> items;
-                QStandardItem* itemName = new QStandardItem(QString::fromLocal8Bit((*it).name.c_str()));
-                QStandardItem* itemHigher = new QStandardItem(QString::fromLocal8Bit((*it).higher_control.c_str()));
-                QStandardItem* itemPath = new QStandardItem(QString::fromLocal8Bit((*it).path.c_str()));
+                QStandardItem* itemName = new QStandardItem(QString::fromStdString((*it).name.c_str()));
+                QStandardItem* itemHigher = new QStandardItem(QString::fromStdString((*it).higher_control.c_str()));
+                QStandardItem* itemPath = new QStandardItem(QString::fromStdString((*it).path.c_str()));
                 items << itemName << itemHigher << itemPath;
                 items[0]->setData(MARK_ITEM,ROLE_MARK);
                 itemModelmap[(*it).name] = items;
@@ -83,7 +83,7 @@ void MainWindow::InitTree()
             for(vector<PointLights>::iterator it = g_pointlights.begin(); it!=g_pointlights.end();it++){
 
                 QList<QStandardItem*> items;
-                QStandardItem* itemName = new QStandardItem(QString::fromLocal8Bit((*it).name.c_str()));
+                QStandardItem* itemName = new QStandardItem(QString::fromStdString((*it).name.c_str()));
                 items << itemName;
                 items[0]->setData(MARK_ITEM,ROLE_MARK);
                 itemLightmap[(*it).name] = items;
@@ -127,11 +127,12 @@ void MainWindow::on_actionnew_import_triggered()
     importnew->exec();
     if(currentSize != static_cast<int>(g_objects.size())){
         QList<QStandardItem*> items;
-        QStandardItem* itemName = new QStandardItem(QString::fromLocal8Bit(g_objects.back().name.c_str()));
-        QStandardItem* itemHigher = new QStandardItem(QString::fromLocal8Bit(g_objects.back().higher_control.c_str()));
-        QStandardItem* itemPath = new QStandardItem(QString::fromLocal8Bit(g_objects.back().path.c_str()));
+        QStandardItem* itemName = new QStandardItem(QString::fromStdString(g_objects.back().name.c_str()));
+        QStandardItem* itemHigher = new QStandardItem(QString::fromStdString(g_objects.back().higher_control.c_str()));
+        QStandardItem* itemPath = new QStandardItem(QString::fromStdString(g_objects.back().path.c_str()));
         items << itemName << itemHigher << itemPath;
         items[0]->setData(MARK_ITEM,ROLE_MARK);
+        itemModelmap[g_objects.back().name] = items; //tree控件模型对象增加
         itemFirstmap[g_objects.back().parent_type]->appendRow(items);
     }
 }
@@ -194,8 +195,8 @@ void MainWindow::slotTreeMenu(const QPoint &pos)
             }
         }
         else if(MARK_ITEM == var.toInt()){
-        menu.addAction(QStringLiteral("删除"), this, SLOT(slotTreeMenuRemoveModel(bool)));
-        menu.addAction(QStringLiteral("修改"), this, SLOT(slotTreeMenuChangeModel(bool)));
+        menu.addAction(QStringLiteral("删除"), this, SLOT(slotTreeMenuRemoveType(bool)));
+        menu.addAction(QStringLiteral("修改"), this, SLOT(slotTreeMenuChangeType(bool)));
         }
     }
     else{
@@ -226,29 +227,26 @@ void MainWindow::slotTreeMenuRemoveType(bool checked)
             {
                 QString t = ui->treeView->model()->itemData(index).values()[0].toString();
                 std::string t1 = t.toUtf8().toStdString();
-//                cout << t1<<endl;
-//                for(vector<string>::iterator it  = g_parent_type.begin(); it != g_parent_type.end(); ++it) //删除父节点数据
-//                        {
-//                                if((*it) == t1){
-//                                    g_parent_type.erase(it);
-//                                }
-//                       }
                 auto print_type = std::remove_if(g_parent_type.begin(),g_parent_type.end(),[=](string const& obj)
                 {return obj == t1;});
                 if (print_type != g_parent_type.end()){
-                    g_parent_type.erase(print_type);
+                    g_parent_type.erase(print_type); //清除父类全局变量内的对应值
                 }
 
-
-//                for(vector<string>::iterator it = g_parent_type.begin(); it!=g_parent_type.end();it++){
-//                    cout<<(*it)<< endl;}
                 for(vector<ObjectData>::iterator it  = g_objects.begin(); it != g_objects.end();it++ )  //删除子节点数据
                         {
                                 if((*it).parent_type == t1){
-                                    g_objects.erase(it);
+                                    itemModelmap.erase((*it).name);  //清除模型Map函数数据
+                                    if(it == g_objects.end()-1){
+                                       g_objects.pop_back();  //如果是最后一个元素
+                                       break;
+                                    }
+                                    else{
+                                       it = g_objects.erase(it);  //清除模型数据
+                                    }
                                 }
                        }
-                itemFirstmap.erase(t.toUtf8().toStdString()); //清除Map函数数据。
+                itemFirstmap.erase(t.toUtf8().toStdString()); //清除第一级Map函数数据。
                 mModel->removeRow(index.row(),index.parent()); //清除树节点数据
                 break;
             }
@@ -274,22 +272,48 @@ void MainWindow::slotTreeMenuRemoveType(bool checked)
                 if (std::find_if(g_parent_type.begin(),g_parent_type.end(), [=](string const& obj){
                                  return obj == parentText.toUtf8().toStdString();
                              })== g_parent_type.end()){
+                    std::string t1 = text.toUtf8().toStdString();
+                    std::cout<<t1;
+                    for(vector<PointLights>::iterator it = g_pointlights.begin(); it != g_pointlights.end();it++ )  //删除子节点数据
+                        {
+                            if((*it).name == t1){
+
+                                itemLightmap.erase((*it).name);  //清除光源Map函数数据
+                                mModel->removeRow(index.row(),index.parent()); //清除树节点数据
+                                if(it == g_pointlights.end()-1){   //清除光源数据
+                                   g_pointlights.pop_back();
+                                   break;
+                                }
+                                else{
+                                   it = g_pointlights.erase(it);
+                                   break;  //提前结束提高效率
+                                }
+                            }
+                       }
+//                    int i = static_cast<int>(g_pointlights.size());
+//                    cout<<i;
 
                 }
                 else{
-                    QString t = ui->treeView->model()->itemData(curIndex).values()[0].toString();
-                    std::string t1 = t.toUtf8().toStdString();
-                    for(vector<ObjectData>::iterator it  = g_objects.begin(); it != g_objects.end(); )  //删除子节点数据
-                            {
-                                    if((*it).name == t1){
-                                        g_objects.erase(it);  //清除模型数据
-                                        itemModelmap.erase((*it).name);  //清除模型Map函数数据
-                                        mModel->removeRow(index.row(),index.parent()); //清除树节点数据
-                                    }
-                           }
-//                    for(vector<string>::iterator it = g_parent_type.begin(); it!=g_parent_type.end();it++){
-//                        cout<<(*it)<< endl;
-//                    }
+//                    QString t = ui->treeView->model()->itemData(curIndex).values()[0].toString();
+                    std::string t1 = text.toUtf8().toStdString();
+                    for(vector<ObjectData>::iterator it = g_objects.begin(); it != g_objects.end();it++ )  //删除子节点数据
+                        {
+                            if((*it).name == t1){
+                                itemModelmap.erase((*it).name);  //清除模型Map函数数据
+                                mModel->removeRow(index.row(),index.parent()); //清除树节点数据
+                                if(it == g_objects.end()-1){
+                                   g_objects.pop_back();
+                                   break;
+                                }
+                                else{
+                                   it = g_objects.erase(it);  //清除模型数据
+                                   break;  //提前结束提高效率
+                                }
+
+
+                            }
+                       }
                 }
                 //itemmap.erase(ui->treeView->get)
                 break;
@@ -303,6 +327,66 @@ void MainWindow::slotTreeMenuRemoveType(bool checked)
     }
 }
 
+void MainWindow::slotTreeMenuChangeType(bool checked)
+{
+    QModelIndex curIndex = ui->treeView->currentIndex();      //当前点击的元素的index
+    QModelIndex index = curIndex.sibling(curIndex.row(),0); //该行的第1列元素的index
+    QVariant var = index.data(ROLE_MARK);
+
+    if (var.isValid())
+    {
+        // 如果是子模型或者光源
+        if(MARK_ITEM == var.toInt()){
+            QStandardItem* item = mModel->itemFromIndex(index);
+            QString parentText = item->parent()->text();
+            QString text = item->text();
+            QMessageBox:: StandardButton result = QMessageBox::information(NULL, QStringLiteral("提示"), QStringLiteral("确定修改%s模型参数吗！").arg(text), QMessageBox::Yes | QMessageBox::No,
+                                                      QMessageBox::No);
+            switch (result)
+            {
+            case QMessageBox::Yes:
+            {
+                //如果输入的值为光源
+                if (std::find_if(g_parent_type.begin(),g_parent_type.end(), [=](string const& obj){
+                                 return obj == parentText.toUtf8().toStdString();
+                             })== g_parent_type.end()){
+                    std::string t1 = text.toUtf8().toStdString();
+                    std::cout<<t1;
+                    for(vector<PointLights>::iterator it = g_pointlights.begin(); it != g_pointlights.end();it++ )  //删除子节点数据
+                        {
+                            if((*it).name == t1){
+                                addlights = new AddLights(it,this);
+                                addlights->setModal(true);
+                                addlights->exec();
+                            }
+                       }
+//                    int i = static_cast<int>(g_pointlights.size());
+//                    cout<<i;
+
+                }
+                else{
+//                    QString t = ui->treeView->model()->itemData(curIndex).values()[0].toString();
+                    std::string t1 = text.toUtf8().toStdString();
+                    for(vector<ObjectData>::iterator it = g_objects.begin(); it != g_objects.end();it++ )  //删除子节点数据
+                        {
+                            if((*it).name == t1){
+                                importnew = new ImportNew(it,this);
+                                importnew->setModal(true);
+                                importnew->exec();
+                            }
+                       }
+                }
+                //itemmap.erase(ui->treeView->get)
+                break;
+            }
+            case QMessageBox::No:
+                break;
+            default:
+                break;
+            }
+        }
+    }
+}
 
 void MainWindow::slotTreeMenuExpand(bool checked)
 {
@@ -341,14 +425,18 @@ void MainWindow::slotTreeMenuAddType(bool checked)
 
 void MainWindow::slotTreeMenuAddLightType(bool checked)
 {
+    int currentSize = g_pointlights.size();
     addlights = new AddLights(this);
     addlights->setModal(true);
     addlights->exec();
-    QList<QStandardItem*> items;
-    QStandardItem* itemName = new QStandardItem(QString::fromLocal8Bit(g_pointlights.back().name.c_str()));
-    items << itemName;
-    items[0]->setData(MARK_ITEM,ROLE_MARK);
-    itemFirstmap["Light"]->appendRow(items);
+    if(currentSize != static_cast<int>(g_pointlights.size())){
+        QList<QStandardItem*> items;
+        QStandardItem* itemName = new QStandardItem(QString::fromStdString(g_pointlights.back().name.c_str()));
+        items << itemName;
+        items[0]->setData(MARK_ITEM,ROLE_MARK);
+        itemLightmap[g_pointlights.back().name] = items; //tree控件光源对象增加
+        itemFirstmap["Light"]->appendRow(items);
+    }
 
 }
 
@@ -360,12 +448,13 @@ void MainWindow::slotTreeMenuAddModelType(bool checked)
     importnew->exec();
     if(currentSize != static_cast<int>(g_objects.size())){
         QList<QStandardItem*> items;
-        QStandardItem* itemName = new QStandardItem(QString::fromLocal8Bit(g_objects.back().name.c_str()));
-        QStandardItem* itemHigher = new QStandardItem(QString::fromLocal8Bit(g_objects.back().higher_control.c_str()));
-        QStandardItem* itemPath = new QStandardItem(QString::fromLocal8Bit(g_objects.back().path.c_str()));
+        QStandardItem* itemName = new QStandardItem(QString::fromStdString(g_objects.back().name.c_str()));
+        QStandardItem* itemHigher = new QStandardItem(QString::fromStdString(g_objects.back().higher_control.c_str()));
+        QStandardItem* itemPath = new QStandardItem(QString::fromStdString(g_objects.back().path.c_str()));
         items << itemName << itemHigher << itemPath;
         items[0]->setData(MARK_ITEM,ROLE_MARK);
-        itemFirstmap[g_objects.back().parent_type]->appendRow(items);
+        itemModelmap[g_objects.back().name] = items; //tree控件模型对象增加
+        itemFirstmap[g_objects.back().parent_type]->appendRow(items); //tree控件加入该元素
     }
 }
 

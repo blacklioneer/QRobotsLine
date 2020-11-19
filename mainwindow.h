@@ -29,6 +29,7 @@ private slots:
     /** 删除大类和下面子模型
       * 或者删除单个模型 */
     void slotTreeMenuRemoveType(bool checked = false);
+    void slotTreeMenuChangeType(bool checked = false);
     /** 增加光源 */
     void slotTreeMenuAddLightType(bool checked = false);
     /** 增加模型 */
