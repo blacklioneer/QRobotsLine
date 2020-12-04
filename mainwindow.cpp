@@ -137,6 +137,7 @@ void MainWindow::on_actionnew_import_triggered()
     }
 }
 
+
 void MainWindow::on_fold_clicked()
 {
     if (!fold){
@@ -189,7 +190,7 @@ void MainWindow::slotTreeMenu(const QPoint &pos)
                 menu.addSeparator();    //添加一个分隔线
                 menu.addAction(QStringLiteral("折叠"), this, SLOT(slotTreeMenuCollapse(bool)));
                 menu.addSeparator();
-                menu.addAction(QStringLiteral("添加"), this, SLOT(slotTreeMenuAddType(bool)));
+                menu.addAction(QStringLiteral("添加"), this, SLOT(slotTreeMenuAddModelType(bool)));
                 menu.addSeparator();
                 menu.addAction(QStringLiteral("删除"), this, SLOT(slotTreeMenuRemoveType(bool)));
             }
@@ -355,7 +356,7 @@ void MainWindow::slotTreeMenuChangeType(bool checked)
                     for(vector<PointLights>::iterator it = g_pointlights.begin(); it != g_pointlights.end();it++ )  //删除子节点数据
                         {
                             if((*it).name == t1){
-                                addlights = new AddLights(it,this);
+                                addlights = new AddLights((*it),this);
                                 addlights->setModal(true);
                                 addlights->exec();
                             }
@@ -370,7 +371,7 @@ void MainWindow::slotTreeMenuChangeType(bool checked)
                     for(vector<ObjectData>::iterator it = g_objects.begin(); it != g_objects.end();it++ )  //删除子节点数据
                         {
                             if((*it).name == t1){
-                                importnew = new ImportNew(it,this);
+                                importnew = new ImportNew((*it),this);
                                 importnew->setModal(true);
                                 importnew->exec();
                             }

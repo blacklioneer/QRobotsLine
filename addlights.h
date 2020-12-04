@@ -1,4 +1,4 @@
-#ifndef ADDLIGHTS_H
+﻿#ifndef ADDLIGHTS_H
 #define ADDLIGHTS_H
 
 #include <QDialog>
@@ -15,7 +15,7 @@ class AddLights : public QDialog
 public:
     AddLights(QWidget *parent = nullptr);
     /** 光源数据修改构造函数 */
-    AddLights(vector<PointLights>::iterator it = g_pointlights.begin(),QWidget *parent = nullptr);
+    AddLights(PointLights &it,QWidget *parent = nullptr);
 
     ~AddLights();
 
@@ -27,7 +27,7 @@ private:
     /** 是否为修改界面 */
     bool ischanging = false;
     /** 当前选定的光源对象值 */
-    vector<PointLights>::iterator a_it ;
+    PointLights &a_it ;
 };
 
 #endif // ADDLIGHTS_H

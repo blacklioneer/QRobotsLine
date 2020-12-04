@@ -81,3 +81,7 @@ extern vector<PointLights> g_pointlights;
 /** 全局环境光设置，需要一个输入组件*/
 extern DirLights dirlights;
 
+/** 初始化光源 光源窗口界面函数构造用 */
+extern PointLights InitLight ;
+/** 初始化绘制对象 模型界面窗口界面函数构造用 */
+extern ObjectData InitObject ;

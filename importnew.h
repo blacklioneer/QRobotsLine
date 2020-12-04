@@ -1,4 +1,4 @@
-#ifndef IMPORTNEW_H
+﻿#ifndef IMPORTNEW_H
 #define IMPORTNEW_H
 
 #include <QDialog>
@@ -13,7 +13,7 @@ class ImportNew : public QDialog
 
 public:
     explicit ImportNew(QWidget *parent = nullptr);
-     ImportNew(vector<ObjectData>::iterator it  = g_objects.begin(),QWidget *parent = nullptr);
+     ImportNew(ObjectData &it,QWidget *parent = nullptr);
     ~ImportNew();
 
 private slots:
@@ -33,7 +33,7 @@ private:
     Ui::ImportNew *ui;
     bool ischanging = false;
     /** 当前选定的模型对象值 */
-    vector<ObjectData>::iterator a_it ;
+    ObjectData &a_it ;
 };
 
 #endif // IMPORTNEW_H
